@@ -10,7 +10,7 @@ const SongsScreen = () => {
 				style={{
 					paddingHorizontal: screenPadding.horizontal
 				}}>
-				<TracksList scrollEnabled={false} />
+				<TracksList />
 			</ScrollView>
 		</View>
 	)

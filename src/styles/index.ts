@@ -1,5 +1,5 @@
-import { colors, fontSize } from "@/constants/tokens";
-import { StyleSheet } from "react-native";
+import { colors, fontSize } from '@/constants/tokens'
+import { StyleSheet } from 'react-native'
 
 export const defaultStyles = StyleSheet.create({
 	container: {
@@ -11,5 +11,6 @@ export const defaultStyles = StyleSheet.create({
 		color: colors.text,
 	},
 })
+
 
 export const utilsStyles = StyleSheet.create({})

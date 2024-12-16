@@ -1,15 +1,17 @@
 import { StatusBar } from 'expo-status-bar'
 import { Stack } from 'expo-router'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-// import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 const App = () => {
 	return (
 		<SafeAreaProvider>
-			<RootNavigation />
-			<StatusBar style='auto' />
-		</SafeAreaProvider>
-	)
+			<GestureHandlerRootView style={{ flex: 1 }}>
+				<RootNavigation />
+
+				<StatusBar style="auto" />
+			</GestureHandlerRootView>
+		</SafeAreaProvider>)
 
 }
 
