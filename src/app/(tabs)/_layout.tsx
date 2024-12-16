@@ -7,6 +7,7 @@ import { FontAwesome, MaterialCommunityIcons, Ionicons, FontAwesome6 } from "@ex
 const TabsNavigation = () => {
 	return (
 		<Tabs screenOptions={{
+			tabBarHideOnKeyboard: true,
 			tabBarActiveTintColor: colors.primary, tabBarLabelStyle: {
 				fontSize: fontSize.xs,
 				fontWeight: '500',
@@ -20,11 +21,11 @@ const TabsNavigation = () => {
 				borderTopRightRadius: 15,
 				borderTopWidth: 0,
 				paddingTop: 8,
-				backgroundColor: colors.background
 			},
 			tabBarBackground: () =>
 				<BlurView
-					intensity={35}
+					intensity={130}
+					tint="systemMaterialDark"
 					style={{
 						...StyleSheet.absoluteFillObject,
 						overflow: 'hidden',

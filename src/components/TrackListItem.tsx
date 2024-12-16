@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
 		columnGap: 14,
 		alignItems: 'center',
 		paddingRight: 20,
-		paddingBottom: 20
 	},
 	trackArtworkImage: {
 		borderRadius: 8,
