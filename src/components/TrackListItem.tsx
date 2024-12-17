@@ -1,23 +1,26 @@
 import { unknownTrackImageUri } from "@/constants/images";
-import { TouchableHighlight, View, Text, Image } from "react-native"
+import { TouchableHighlight, View, Text, Image } from "react-native";
 import { StyleSheet } from "react-native";
 import { colors, fontSize } from "@/constants/tokens";
 import { defaultStyles } from "@/styles";
 import { Track, useActiveTrack } from "react-native-track-player";
-import { Entypo } from '@expo/vector-icons'
+import { Entypo, Ionicons } from '@expo/vector-icons';
+import { useIsPlaying } from "react-native-track-player";
+import LoaderKit from 'react-native-loader-kit';
 
 export type TrackListItemProps = {
-	track: Track
-	onTrackSelect: (track: Track) => void
-}
+	track: Track;
+	onTrackSelect: (track: Track) => void;
+};
 
 export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: TrackListItemProps) => {
 	const isActiveTrack = useActiveTrack()?.url === track.url;
+	const { playing } = useIsPlaying();
 
 	return (
 		<TouchableHighlight onPress={() => handleTrackSelect(track)}>
 			<View style={styles.trackItemContainer}>
-				<View>
+				<View style={styles.trackImageContainer}>
 					<Image
 						source={{
 							uri: track.artwork ?? unknownTrackImageUri,
@@ -28,20 +31,31 @@ export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: Track
 						]}
 						resizeMode="cover"
 					/>
+					{/* Play or Pause Icon */}
+					{isActiveTrack &&
+						(playing ? (
+							<LoaderKit
+								style={styles.trackPlayingIconIndicator}
+								name="LineScaleParty"
+								color={colors.primary}
+							/>
+						) : (
+							<Ionicons
+								name="play"
+								size={24}
+								color={colors.primary}
+								style={styles.trackPauseIconIndicator}
+							/>
+						))}
 				</View>
-				<View style={{
-					flex: 1,
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					alignItems: 'center'
-				}}>
-					<View style={{
-						width: '100%'
-					}}>
-						<Text numberOfLines={1}
+				{/* Track Details */}
+				<View style={styles.trackDetailsContainer}>
+					<View style={styles.trackTextContainer}>
+						<Text
+							numberOfLines={1}
 							style={[
 								styles.trackTitleText,
-								{ color: isActiveTrack ? colors.primary : colors.text }
+								{ color: isActiveTrack ? colors.primary : colors.text },
 							]}>
 							{track.title}
 						</Text>
@@ -51,31 +65,55 @@ export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: Track
 							</Text>
 						)}
 					</View>
-					<Entypo name='dots-three-horizontal' size={18} color={colors.icon} />
-
+					<Entypo name="dots-three-horizontal" size={18} color={colors.icon} />
 				</View>
 			</View>
 		</TouchableHighlight>
-	)
-}
+	);
+};
 
 const styles = StyleSheet.create({
 	trackItemContainer: {
-		flexDirection: 'row',
+		flexDirection: "row",
 		columnGap: 14,
-		alignItems: 'center',
+		alignItems: "center",
 		paddingRight: 20,
+	},
+	trackImageContainer: {
+		position: "relative",
 	},
 	trackArtworkImage: {
 		borderRadius: 8,
 		width: 50,
 		height: 50,
 	},
+	trackPlayingIconIndicator: {
+		position: 'absolute',
+		top: 18,
+		left: 16,
+		width: 16,
+		height: 16,
+	},
+	trackPauseIconIndicator: {
+		position: "absolute",
+		top: "50%", // Center vertically
+		left: "50%", // Center horizontally
+		transform: [{ translateX: -12 }, { translateY: -12 }], // Offset for centering icon
+	},
+	trackDetailsContainer: {
+		flex: 1,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	trackTextContainer: {
+		width: "100%",
+	},
 	trackTitleText: {
 		...defaultStyles.text,
 		fontSize: fontSize.sm,
-		fontWeight: '600',
-		maxWidth: '90%',
+		fontWeight: "600",
+		maxWidth: "90%",
 	},
 	trackArtistText: {
 		...defaultStyles.text,
@@ -83,4 +121,5 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		marginTop: 4,
 	},
-})
+});
+
