@@ -6,9 +6,9 @@ import { View, TextInput, StyleSheet, KeyboardAvoidingView, Platform, TouchableO
 import { colors } from "@/constants/tokens";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from '@expo/vector-icons'; // For icons
-import library from '@/assets/data/library.json'
 import { useMemo } from "react";
 import { trackTitleFilter } from "@/helpers/filter";
+import { useTracks } from "@/stores/library";
 
 const SongsScreen = () => {
 	// Hook for search functionality (if applicable in the header)
@@ -17,10 +17,15 @@ const SongsScreen = () => {
 			placeholder: "Find in songs...",
 		},
 	});
+
+	const tracks = useTracks()
+
 	const filteredTracks = useMemo(() => {
-		if (!search) return library
-		return library.filter(trackTitleFilter(search))
-	}, [search]);
+
+		if (!search) return tracks
+
+		return tracks.filter(trackTitleFilter(search))
+	}, [search, tracks]);
 
 	return (
 		<SafeAreaView
