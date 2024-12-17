@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons'; // For icons
 import { useMemo } from "react";
 import { trackTitleFilter } from "@/helpers/filter";
 import { useTracks } from "@/stores/library";
+import { generateTracksListId } from "@/helpers/miscellaneous";
 
 const SongsScreen = () => {
 	// Hook for search functionality (if applicable in the header)
@@ -69,7 +70,7 @@ const SongsScreen = () => {
 					</View>
 				</View>
 				<View style={styles.content}>
-					<TracksList tracks={filteredTracks} />
+					<TracksList id={generateTracksListId('songs', search)} tracks={filteredTracks} />
 				</View>
 			</KeyboardAvoidingView>
 		</SafeAreaView>

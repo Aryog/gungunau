@@ -2,11 +2,14 @@ import { FlatList, FlatListProps } from "react-native"
 import { TrackListItem } from "@/components/TrackListItem"
 import { utilsStyles } from "@/styles"
 import { View, Text, Image } from "react-native"
+import { useRef } from "react"
+import { useQueue } from "@/stores/queue"
 import { screenPadding } from "@/constants/tokens"
 import TrackPlayer, { Track } from 'react-native-track-player'
 import { unknownTrackImageUri } from "@/constants/images"
 
 export type TracksListProps = Partial<FlatListProps<Track>> & {
+	id: string,
 	tracks: Track[]
 }
 
@@ -16,10 +19,38 @@ const ItemDivider = () => {
 		</View>
 	)
 }
-export const TracksList = ({ tracks, ...flatlistProps }: TracksListProps) => {
-	const handleTrackSelect = async (track: Track) => {
-		await TrackPlayer.load(track)
-		await TrackPlayer.play()
+export const TracksList = ({ id, tracks, ...flatlistProps }: TracksListProps) => {
+	const queueOffset = useRef(0)
+	const { activeQueueId, setActiveQueueId } = useQueue()
+
+	const handleTrackSelect = async (selectedTrack: Track) => {
+		const trackIndex = tracks.findIndex((track) => track.url === selectedTrack.url)
+
+		if (trackIndex === -1) return;
+
+
+		// Within the screen
+		const isChangingQueue = id !== activeQueueId
+		if (isChangingQueue) {
+			const beforeTracks = tracks.slice(0, trackIndex)
+			const afterTracks = tracks.slice(trackIndex + 1)
+
+			await TrackPlayer.reset()
+
+			// Construct new queue
+			await TrackPlayer.add(selectedTrack)
+			await TrackPlayer.add(afterTracks)
+			await TrackPlayer.add(beforeTracks)
+
+			await TrackPlayer.play()
+
+			queueOffset.current = trackIndex
+			setActiveQueueId(id)
+		} else {
+			const nextTrackIndex = trackIndex - queueOffset.current < 0 ? tracks.length + trackIndex - queueOffset.current : trackIndex - queueOffset.current
+			await TrackPlayer.skip(nextTrackIndex)
+			await TrackPlayer.play()
+		}
 	}
 	return (
 		<FlatList

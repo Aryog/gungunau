@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import { useFavorites } from "@/stores/library";
 
 import { Platform } from "react-native";
+import { generateTracksListId } from "@/helpers/miscellaneous";
 const favoritesScreen = () => {
 
 	const { search, handleOnChangeText } = useNavigationSearch({
@@ -73,7 +74,7 @@ const favoritesScreen = () => {
 					</View>
 				</View>
 				<View style={styles.content}>
-					<TracksList tracks={filteredFavoritesTracks} />
+					<TracksList id={generateTracksListId('favorites', search)} tracks={filteredFavoritesTracks} />
 				</View>
 			</KeyboardAvoidingView>
 		</SafeAreaView>
