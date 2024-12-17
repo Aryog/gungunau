@@ -22,10 +22,8 @@ const SongsScreen = () => {
 	const tracks = useTracks()
 
 	const filteredTracks = useMemo(() => {
-
 		if (!search) return tracks
-
-		return tracks.filter(trackTitleFilter(search))
+		return tracks.filter(track => trackTitleFilter(search)(track))
 	}, [search, tracks]);
 
 	return (
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
 	searchContainer: {
 		paddingHorizontal: 15,
 		paddingTop: 10,
-		paddingBottom: 20,
+		paddingBottom: 10,
 	},
 	searchInputWrapper: {
 		flexDirection: 'row',

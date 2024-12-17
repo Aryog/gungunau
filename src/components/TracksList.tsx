@@ -7,10 +7,12 @@ import { useQueue } from "@/stores/queue"
 import { screenPadding } from "@/constants/tokens"
 import TrackPlayer, { Track } from 'react-native-track-player'
 import { unknownTrackImageUri } from "@/constants/images"
+import { QueueControls } from "./QueueControls"
 
 export type TracksListProps = Partial<FlatListProps<Track>> & {
 	id: string,
 	tracks: Track[]
+	hideQueueControls?: boolean
 }
 
 const ItemDivider = () => {
@@ -19,7 +21,7 @@ const ItemDivider = () => {
 		</View>
 	)
 }
-export const TracksList = ({ id, tracks, ...flatlistProps }: TracksListProps) => {
+export const TracksList = ({ id, tracks, hideQueueControls = false, ...flatlistProps }: TracksListProps) => {
 	const queueOffset = useRef(0)
 	const { activeQueueId, setActiveQueueId } = useQueue()
 
@@ -56,6 +58,7 @@ export const TracksList = ({ id, tracks, ...flatlistProps }: TracksListProps) =>
 		<FlatList
 			data={tracks}
 			ItemSeparatorComponent={ItemDivider}
+			ListHeaderComponent={!hideQueueControls ? <QueueControls tracks={tracks} style={{ paddingBottom: 10 }} /> : undefined}
 			ListFooterComponent={ItemDivider}
 			showsVerticalScrollIndicator
 			ListEmptyComponent={<View>
