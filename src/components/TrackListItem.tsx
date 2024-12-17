@@ -3,20 +3,24 @@ import { TouchableHighlight, View, Text, Image } from "react-native"
 import { StyleSheet } from "react-native";
 import { colors, fontSize } from "@/constants/tokens";
 import { defaultStyles } from "@/styles";
+import { Track, useActiveTrack } from "react-native-track-player";
+import { Entypo } from '@expo/vector-icons'
 
 export type TrackListItemProps = {
-	track: { title: string; image?: string, artist?: string }
+	track: Track
+	onTrackSelect: (track: Track) => void
 }
 
-export const TrackListItem = ({ track }: TrackListItemProps) => {
-	const isActiveTrack = false;
+export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: TrackListItemProps) => {
+	const isActiveTrack = useActiveTrack()?.url === track.url;
+
 	return (
-		<TouchableHighlight>
+		<TouchableHighlight onPress={() => handleTrackSelect(track)}>
 			<View style={styles.trackItemContainer}>
 				<View>
 					<Image
 						source={{
-							uri: track.image ?? unknownTrackImageUri,
+							uri: track.artwork ?? unknownTrackImageUri,
 						}}
 						style={[
 							styles.trackArtworkImage,
@@ -26,20 +30,29 @@ export const TrackListItem = ({ track }: TrackListItemProps) => {
 					/>
 				</View>
 				<View style={{
-					width: '100%'
+					flex: 1,
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					alignItems: 'center'
 				}}>
-					<Text numberOfLines={1}
-						style={[
-							styles.trackTitleText,
-							{ color: isActiveTrack ? colors.primary : colors.text }
-						]}>
-						{track.title}
-					</Text>
-					{track.artist && (
-						<Text numberOfLines={1} style={styles.trackArtistText}>
-							{track.artist}
+					<View style={{
+						width: '100%'
+					}}>
+						<Text numberOfLines={1}
+							style={[
+								styles.trackTitleText,
+								{ color: isActiveTrack ? colors.primary : colors.text }
+							]}>
+							{track.title}
 						</Text>
-					)}
+						{track.artist && (
+							<Text numberOfLines={1} style={styles.trackArtistText}>
+								{track.artist}
+							</Text>
+						)}
+					</View>
+					<Entypo name='dots-three-horizontal' size={18} color={colors.icon} />
+
 				</View>
 			</View>
 		</TouchableHighlight>
