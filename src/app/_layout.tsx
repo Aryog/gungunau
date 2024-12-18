@@ -8,6 +8,7 @@ import { useLogTrackPlayerState } from '@/hooks/useLogTrackPlayerState'
 import { colors } from '@/constants/tokens'
 import { playbackService } from '@/constants/playbackService'
 import TrackPlayer from 'react-native-track-player'
+import { PaperProvider } from 'react-native-paper'
 
 
 SplashScreen.preventAutoHideAsync()
@@ -21,11 +22,13 @@ const App = () => {
 	useLogTrackPlayerState()
 	return (
 		<SafeAreaProvider>
-			<GestureHandlerRootView style={{ flex: 1 }}>
-				<RootNavigation />
-				<StatusBar style='light' />
+			<PaperProvider>
+				<GestureHandlerRootView style={{ flex: 1 }}>
+					<RootNavigation />
+					<StatusBar style='light' />
 
-			</GestureHandlerRootView>
+				</GestureHandlerRootView>
+			</PaperProvider>
 		</SafeAreaProvider>)
 
 }
