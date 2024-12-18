@@ -7,7 +7,12 @@ const setupPlayer = async () => {
 	})
 	await TrackPlayer.updateOptions({
 		ratingType: RatingType.Heart,
-		capabilities: [Capability.Play, Capability.Pause, Capability.SkipToNext, Capability.SkipToPrevious, Capability.Stop,],
+		capabilities: [Capability.Play,
+		Capability.Pause,
+		Capability.SkipToNext,
+		Capability.SkipToPrevious,
+		Capability.Stop,
+		],
 	})
 	await TrackPlayer.setVolume(0.5)
 	await TrackPlayer.setRepeatMode(RepeatMode.Queue)

@@ -7,17 +7,18 @@ import { View, TextInput, StyleSheet, KeyboardAvoidingView, Platform, TouchableO
 import { colors } from "@/constants/tokens";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from '@expo/vector-icons'; // For icons
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { trackTitleFilter } from "@/helpers/filter";
 import { useTracks } from "@/stores/library";
 import { generateTracksListId } from "@/helpers/miscellaneous";
 
 const SongsScreen = () => {
 	// Hook for search functionality (if applicable in the header)
-	const { search, handleOnChangeText } = useNavigationSearch({
+	const { search, handleOnChangeText, resetSearch, searchValue } = useNavigationSearch({
 		searchBarOptions: {
 			placeholder: "Find in songs...",
 		},
+		key: 'songs-screen'
 	});
 
 
@@ -28,10 +29,10 @@ const SongsScreen = () => {
 
 	const filteredTracks = useMemo(() => {
 
-		console.log(tracks)
-		if (!search) return validTracks;
+		if (!searchValue) return validTracks;
 		return validTracks.filter(track => trackTitleFilter(search)(track));
-	}, [search, validTracks]);
+	}, [searchValue, validTracks]);
+
 
 	return (
 		<SafeAreaView
@@ -63,7 +64,7 @@ const SongsScreen = () => {
 						/>
 						{/* Clear Icon */}
 						{search.length > 0 && (
-							<TouchableOpacity onPress={() => handleOnChangeText('')}>
+							<TouchableOpacity onPress={() => resetSearch()}>
 								<Ionicons
 									name="close"
 									size={20}

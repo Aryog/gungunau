@@ -2,6 +2,7 @@ import { defaultStyles } from "@/styles"
 import { screenPadding } from "@/constants/tokens";
 import { useRouter } from "expo-router";
 import { useNavigationSearch } from "@/hooks/useNavigationSearch";
+import { useEffect } from "react";
 import { colors } from "@/constants/tokens";
 import { StyleSheet } from "react-native";
 import { usePlaylists } from "@/stores/library";
@@ -16,17 +17,19 @@ const playlistsScreen = () => {
 
 	const router = useRouter()
 
-	const { search, handleOnChangeText } = useNavigationSearch({
+	const { search, handleOnChangeText, resetSearch, searchValue } = useNavigationSearch({
 		searchBarOptions: {
 			placeholder: 'Find in playlists',
 		},
+		key: 'playlists-screen'
 	})
 
 	const { playlists } = usePlaylists()
 
 	const filteredPlaylists = useMemo(() => {
+		if (!searchValue) return playlists
 		return playlists.filter(playlistNameFilter(search))
-	}, [playlists, search])
+	}, [playlists, searchValue])
 
 	const handlePlaylistPress = (playlist: Playlist) => {
 		router.push(`/(tabs)/playlists/${playlist.name}`)
@@ -53,7 +56,7 @@ const playlistsScreen = () => {
 						/>
 						{/* Clear Icon */}
 						{search.length > 0 && (
-							<TouchableOpacity onPress={() => handleOnChangeText('')}>
+							<TouchableOpacity onPress={() => resetSearch()}>
 								<Ionicons name="close" size={20} color="white" style={styles.clearIcon} />
 							</TouchableOpacity>
 						)}

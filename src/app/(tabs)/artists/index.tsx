@@ -2,6 +2,7 @@ import { unknownArtistImageUri } from '@/constants/images';
 import { screenPadding } from '@/constants/tokens';
 import { artistNameFilter } from '@/helpers/filter';
 import { useNavigationSearch } from '@/hooks/useNavigationSearch';
+import { useEffect } from 'react';
 import { defaultStyles, utilsStyles } from '@/styles';
 import { colors } from '@/constants/tokens';
 import { useArtists } from '@/stores/library';
@@ -25,19 +26,20 @@ const ItemSeparatorComponent = () => {
 };
 
 const ArtistsScreen = () => {
-	const { search, handleOnChangeText } = useNavigationSearch({
+	const { search, handleOnChangeText, resetSearch, searchValue } = useNavigationSearch({
 		searchBarOptions: {
 			placeholder: 'Find in artists',
 		},
+		key: 'artists-screen'
 	});
 
 	const artists = useArtists();
 
 	const filteredArtists = useMemo(() => {
-		if (!search) return artists;
+		if (!searchValue) return artists;
 
 		return artists.filter(artistNameFilter(search));
-	}, [artists, search]);
+	}, [artists, searchValue]);
 
 	return (
 		<View style={defaultStyles.container}>
@@ -59,7 +61,7 @@ const ArtistsScreen = () => {
 						/>
 						{/* Clear Icon */}
 						{search.length > 0 && (
-							<TouchableOpacity onPress={() => handleOnChangeText('')}>
+							<TouchableOpacity onPress={() => resetSearch()}>
 								<Ionicons name="close" size={20} color="white" style={styles.clearIcon} />
 							</TouchableOpacity>
 						)}
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
 	},
 	searchContainer: {
 		paddingTop: 40,
-		paddingBottom: 10,
+		paddingBottom: 0,
 	},
 	searchInputWrapper: {
 		flexDirection: 'row',

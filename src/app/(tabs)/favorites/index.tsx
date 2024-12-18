@@ -2,6 +2,7 @@ import { defaultStyles } from "@/styles"
 import { View } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAvoidingView } from "react-native";
+import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { trackTitleFilter } from "@/helpers/filter";
 import { colors } from "@/constants/tokens";
@@ -16,10 +17,11 @@ import { Platform } from "react-native";
 import { generateTracksListId } from "@/helpers/miscellaneous";
 const favoritesScreen = () => {
 
-	const { search, handleOnChangeText } = useNavigationSearch({
+	const { search, handleOnChangeText, resetSearch, searchValue } = useNavigationSearch({
 		searchBarOptions: {
 			placeholder: 'Find in songs',
 		},
+		key: 'favorites-screen'
 	})
 
 	const favoritesTracks = useFavorites().favorites;
@@ -30,10 +32,11 @@ const favoritesScreen = () => {
 	}, [favoritesTracks]);
 
 	const filteredFavoritesTracks = useMemo(() => {
-		if (!search) return validFavoritesTracks;
+
+		if (!searchValue) return favoritesTracks
 
 		return validFavoritesTracks.filter(trackTitleFilter(search));
-	}, [search, validFavoritesTracks])
+	}, [searchValue, validFavoritesTracks])
 
 	return (
 		<SafeAreaView
@@ -65,7 +68,7 @@ const favoritesScreen = () => {
 						/>
 						{/* Clear Icon */}
 						{search.length > 0 && (
-							<TouchableOpacity onPress={() => handleOnChangeText('')}>
+							<TouchableOpacity onPress={() => resetSearch()}>
 								<Ionicons
 									name="close"
 									size={20}
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
 	searchContainer: {
 		paddingHorizontal: 15,
 		paddingTop: 10,
-		paddingBottom: 20,
+		paddingBottom: 10,
 	},
 	searchInputWrapper: {
 		flexDirection: 'row',
