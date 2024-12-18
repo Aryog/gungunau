@@ -22,15 +22,18 @@ const favoritesScreen = () => {
 		},
 	})
 
-	const favoritesTracks = useFavorites().favorites
+	const favoritesTracks = useFavorites().favorites;
+
+	const validFavoritesTracks = useMemo(() => {
+		// Filter out invalid tracks where title is not a valid string
+		return favoritesTracks.filter(track => typeof track.title === 'string');
+	}, [favoritesTracks]);
 
 	const filteredFavoritesTracks = useMemo(() => {
-		if (!search) return favoritesTracks
+		if (!search) return validFavoritesTracks;
 
-		return favoritesTracks.filter(trackTitleFilter(search))
-
-	}, [search, favoritesTracks])
-	// const filteredFavoritesTracks = () => { }
+		return validFavoritesTracks.filter(trackTitleFilter(search));
+	}, [search, validFavoritesTracks])
 
 	return (
 		<SafeAreaView

@@ -3,10 +3,12 @@ import { TouchableHighlight, View, Text, Image } from "react-native";
 import { StyleSheet } from "react-native";
 import { colors, fontSize } from "@/constants/tokens";
 import { defaultStyles } from "@/styles";
+import { StopPropagation } from "./utils/StopPropagation";
 import { Track, useActiveTrack } from "react-native-track-player";
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { useIsPlaying } from "react-native-track-player";
 import LoaderKit from 'react-native-loader-kit';
+import { TrackShortcutsMenu } from "@/components/TrackShortcutsMenu";
 
 export type TrackListItemProps = {
 	track: Track;
@@ -65,7 +67,11 @@ export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: Track
 							</Text>
 						)}
 					</View>
-					<Entypo name="dots-three-horizontal" size={18} color={colors.icon} />
+					<StopPropagation>
+						<TrackShortcutsMenu track={track}>
+							<Entypo name="dots-three-horizontal" size={18} color={colors.icon} />
+						</TrackShortcutsMenu>
+					</StopPropagation>
 				</View>
 			</View>
 		</TouchableHighlight>

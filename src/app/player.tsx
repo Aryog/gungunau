@@ -2,6 +2,7 @@ import { screenPadding } from "@/constants/tokens";
 import { ActivityIndicator, StyleSheet } from "react-native";
 import { View, Image, Text } from "react-native";
 import { unknownTrackImageUri } from "@/constants/images";
+import { useTrackPlayerFavorite } from "@/hooks/useTrackPlayerFavorite";
 import { PlayerProgressBar } from "@/components/PlayerProgressbar";
 import { PlayerVolumeBar } from "@/components/PlayerVolumeBar";
 import { PlayerRepeatToggle } from "@/components/PlayerRepeatToggle";
@@ -19,9 +20,8 @@ const PlayerScreen = () => {
 	const activeTrack = useActiveTrack()
 	const { imageColors } = usePlayerBackground(activeTrack?.artwork ?? unknownTrackImageUri)
 	const { top, bottom } = useSafeAreaInsets()
-	const isFavorite = false
 
-	const toggleFavorite = () => { }
+	const { isFavorite, toggleFavorite } = useTrackPlayerFavorite()
 
 	if (!activeTrack) {
 		return (

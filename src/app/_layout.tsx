@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { useSetupTrackPlayer } from '@/hooks/useSetupTrackPlayer'
 import { useCallback } from 'react'
 import { useLogTrackPlayerState } from '@/hooks/useLogTrackPlayerState'
+import { colors } from '@/constants/tokens'
 import { playbackService } from '@/constants/playbackService'
 import TrackPlayer from 'react-native-track-player'
 
@@ -40,6 +41,19 @@ const RootNavigation = () => {
 					gestureDirection: 'vertical', animationDuration: 400,
 					headerShown: false
 				}} />
+			<Stack.Screen
+				name="(modals)/addToPlaylist"
+				options={{
+					presentation: 'modal',
+					headerStyle: {
+						backgroundColor: colors.background,
+					},
+					headerTitle: 'Add to playlist',
+					headerTitleStyle: {
+						color: colors.text,
+					},
+				}}
+			/>
 		</Stack>
 	)
 

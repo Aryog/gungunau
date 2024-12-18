@@ -19,12 +19,18 @@ const SongsScreen = () => {
 		},
 	});
 
+
 	const tracks = useTracks()
+	const validTracks = useMemo(() => {
+		return tracks.filter(track => typeof track.title === 'string');
+	}, [tracks]);
 
 	const filteredTracks = useMemo(() => {
-		if (!search) return tracks
-		return tracks.filter(track => trackTitleFilter(search)(track))
-	}, [search, tracks]);
+
+		console.log(tracks)
+		if (!search) return validTracks;
+		return validTracks.filter(track => trackTitleFilter(search)(track));
+	}, [search, validTracks]);
 
 	return (
 		<SafeAreaView
